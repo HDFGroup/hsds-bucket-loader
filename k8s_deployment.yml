@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bucket_loader
+  name: bucket_loader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bucket_loader
+  template:
+    metadata:
+      labels:
+        app: bucket_loader
+    spec:
+      containers:
+        -
+          naame: bucket_watch
+          image: "hdfgroup/bucket_loader"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: config
+            mountPath: "/config/config.yml"
+            subPath: config.yml
+          env:
+          - name: RUN_COMMAAND
+            value: watch
+          - name: PASSWORD_FILE
+            value: /config/passwd.txt
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: hs-loader-keys
+                key: aws_access_key_id
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: hs_-loader-keys
+                key: aws_secret_access_key
+        

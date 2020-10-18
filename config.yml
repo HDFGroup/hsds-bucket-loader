@@ -1,0 +1,19 @@
+# bucket loader configuration
+tgt_bucket: null    # destination bucket for ingested countent - default bucket of HSDS if not set
+tgt_folder: /home/john/bucketloader/files/
+src_bucket: hdf5.sample    # S3 bucket to scan for HDF5 files
+src_prefix: /     # prefix to use for listing files (if null, will list all objects in bucket)
+src_suffix: h5       # Source suffix to use (if null all objects will be loaded)
+link_files: true   # link to source HDF5 on S3 for dataset data 
+inventory_domain: /home/john/bucketloader/inventory.h5
+hs_username: null
+hs_password: null  # overide with environment variable or command line arg
+public_read: true   # make domains public read
+aws_s3_gateway: http://s3.us-west-2.amazonaws.com
+hsds_global:  http://host.docker.internal:8080
+# hsds_global:  http://localhost:8080
+# hsds_local:  http://host.docker.internal
+# hsds_local: http://localhost:8080
+hsds_local: null
+aws_region: us-west-2
+watchdog_sleep_time: 60 
