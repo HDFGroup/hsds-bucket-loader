@@ -2,29 +2,29 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: bucket_loader
-  name: bucket_loader
+    app: hsds-bucket-loader
+  name: hsds-bucket-loader
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bucket_loader
+      app: hsds-bucket-loader
   template:
     metadata:
       labels:
-        app: bucket_loader
+        app: hsds-bucket-loader
     spec:
       containers:
         -
-          naame: bucket_watch
-          image: "hdfgroup/bucket_loader"
+          name: bucket-watch
+          image: 530483214727.dkr.ecr.us-west-2.amazonaws.com/hsds-bucket-loader:v0.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: config
             mountPath: "/config/config.yml"
             subPath: config.yml
           env:
-          - name: RUN_COMMAAND
+          - name: RUN_COMMAND
             value: watch
           - name: PASSWORD_FILE
             value: /config/passwd.txt
@@ -36,6 +36,13 @@ spec:
           - name: AWS_SECRET_ACCESS_KEY
             valueFrom:
               secretKeyRef:
-                name: hs_-loader-keys
+                name: hs-loader-keys
                 key: aws_secret_access_key
+      volumes:
+      - name: accounts
+        secret:
+          secretName: user-password
+      - name: config
+        configMap:
+          name: hsds-bucket-loader-config
         

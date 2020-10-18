@@ -10,8 +10,9 @@ hs_username: null
 hs_password: null  # overide with environment variable or command line arg
 public_read: true   # make domains public read
 aws_s3_gateway: http://s3.us-west-2.amazonaws.com
-hsds_global:  http://host.docker.internal:8080
+# hsds_global:  http://host.docker.internal:8080
 # hsds_global:  http://localhost:8080
+hsds_global: http://10.100.0.136:5101  # run: set the IP here to the CLUSTER_IP you get when running kubectl get service hsds
 # hsds_local:  http://host.docker.internal
 # hsds_local: http://localhost:8080
 hsds_local: null
