@@ -27,15 +27,15 @@ In the diagram, the blue lines represent read/write operations from a pod or scr
 Diagram Legend:
 
 * src_bucket: The S3 bucket containing HDF5 files to be ingested
-* make_inventory.py: A Python script the intializes the inventory file 
+* make_inventory.py: A Python script that intializes the inventory file 
 * dump_inventory.py: A Python script that prints the current inventory state
 * Inventory.h5: A HSDS domain that contains a list of HDF5 files to be ingested along with start and finish times for the ingestion
-* watcher: A Kubernetes pod that continually scans the src_bucket and adds rows to the intventory file for any files that are not already listed
+* watcher: A Kubernetes pod that continually scans the src_bucket and adds rows to the inventory file for any files that are not already listed
 * loader: Kuberntes pod(s) that select a row from inventory (updating the start time as it does) and runs hsload on the file
 * tgt_bucket: The S3 bucket that will contain the ingested data
 * HSDS: Kubernetes pod(s) that run the HSDS service
 
-The number of loader pods can be scaled up or down to increase or decrease the ingestion time.  Each laoder pod has containers to run it's own HSDS, so it's not necessary to scale up the cluster HSDS when the number of loader pods is scaled up.  The cluster HSDS is just used for reading and writing to the inventory file.
+The number of loader pods can be scaled up or down to increase or decrease the ingestion time.  Each loader pod has containers to run its own HSDS, so it's not necessary to scale up the cluster HSDS when the number of loader pods is scaled up.  The cluster HSDS is just used for reading and writing to the inventory file.
 
 Setting up the bucket loader
 ----------------------------
@@ -53,10 +53,10 @@ Setting up the bucket loader
 11. Veify the pod starts correctly: `kubectl get pods` should show the pod in a running state
 12. If you run dump_inventory_file.py now, you should see all the source HDF5 files listed
 13. Run `kubectl apply -f k8s_load_deployment.yml` to launch the loader pod, verify it comes up correctly
-14. As the loader pod ingest files, you should see the start and stop times for each file get updated
+14. As the loader pod ingest files, you should see the start and stop times for each file get updated in the dump inventory output
 15. Use the hsls utility to verify that the corresponding HSDS domains are being created
-16. To speed up the loading, increase the number of loader pods: `kubectl --replicas=n deployment/hsds-bucket-loader` where n is the number of pods desired.  Increase the size of the cluster if you see pods are not getting scheduled
-17. Once the ingestion is complete you can either delete the deploment (e.g. kubectl delete deployment hsds-bucket-loader) or reduce the number of loader pods to a level sufficient to keep up with the rate at which new files are being added to the src bucket.
+16. To speed up the loading process, increase the number of loader pods: `kubectl --replicas=n deployment/hsds-bucket-loader` where n is the number of pods desired.  Increasing the size of the cluster may be necessary if you see pods that are not getting scheduled
+17. Once the ingestion is complete you can either delete the deploment (e.g. `kubectl delete deployment hsds-bucket-loader`) or reduce the number of loader pods to a level sufficient to keep up with the rate at which new files are showing up in the src bucket.
 
 
 
