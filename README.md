@@ -1,15 +1,19 @@
 HSDS Bucket Loader - Scalable HDF5 ingester for HSDS
 =====================================================
 
+![Diagram1](https://github.com/HDFGroup/hsds-bucket-loader/blob/master/images/loader.jpg)
+
 Introduction
 ------------
 
-HSDS (see: https://github.com/HDFGroup/hsds) is a web service that enables efficient access to HDF data stored in its native format.  For users who have existing repositories of HDF5 files, it's necessary to convert them using the hsload utility before the data can be accessed by the server.  If the files are small and/or relatively few in number, it's easy enough to import the files manually.  
+HSDS (see: https://github.com/HDFGroup/hsds) is a web service that enables efficient access to HDF data stored using the HSDS schema (or sharded data format).  For users who have existing repositories of HDF5 files, it's necessary to convert them using the hsload utility before the data can be accessed by the server.  If the files are small and/or relatively few in number, it's easy enough to import the files manually.  
 
 On the other hand, if you have 1000's of files which maybe GB's each, this project provides a way to efficiently perform the ingestion
 using Kubernetes.
 
 This tool was tested using AWS S3 and AWS EKS (managed Kubernetes for AWS), but should work with any Kubernetes cluster with files that are stored in an AWS S3 API compatiblituy storage system (e.g. OpenIO or Scality).
+
+This tool supports either ingesting the source files meta-data and data (link_files in config.yml is False) or just ingesting the meta-data (link_files is True).  The former will typically require about the same amount of storage as was used for the source HDF5 files.  The link mode will used much less storage, but will instead store the chunk locations in the source files.  Clients accessing the content via HSDS will get the same results either way.
 
 Overview
 --------
