@@ -19,7 +19,7 @@ inventory_domain = config.get("inventory_domain")
 f = h5pyd.File(inventory_domain, "r", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
 print(f"{inventory_domain} found, owner: {f.owner}, last madified: {formatTime(f.modified)}")
 print("Contents")
-print("\tFilename\tStart\tDone")
+print("\tFilename\t\tStart\t\t\tDone")
 print("-"*80)
 table = f["inventory"]
 for row in table:

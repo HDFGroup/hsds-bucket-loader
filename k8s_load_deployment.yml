@@ -16,41 +16,8 @@ spec:
     spec:
       containers:
         -
-          name: bucket-watch
-          image: 530483214727.dkr.ecr.us-west-2.amazonaws.com/hsds-bucket-loader:v0.1g
-          imagePullPolicy: IfNotPresent
-          volumeMounts:
-          - name: bucket-config
-            mountPath: "/config/config.yml"
-            subPath: config.yml
-          env:
-          - name: RUN_COMMAND
-            value: watch
-          - name: PASSWORD_FILE
-            value: /config/passwd.txt
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: hs-loader-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: hs-loader-keys
-                key: aws_secret_access_key
-          - name: HS_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: hs-loader-keys
-                key: hs_username
-          - name: HS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: hs-loader-keys
-                key: hs_password
-        -
           name: bucket-load
-          image: 530483214727.dkr.ecr.us-west-2.amazonaws.com/hsds-bucket-loader:v0.1g
+          image: 530483214727.dkr.ecr.us-west-2.amazonaws.com/hsds-bucket-loader:v0.1h
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: bucket-config

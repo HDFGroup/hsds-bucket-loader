@@ -114,7 +114,7 @@ if hsds_local:
         info = h5pyd.getServerInfo(endpoint=hsds_local)
         if info and 'state' in info:
             state = info['state']
-    print("local hsds in in read state")
+    print("local hsds in in READY state")
 
 
 f = h5pyd.File(inventory_domain, "r+", use_cache=False, endpoint=hsds_global, username=username, password=password)
