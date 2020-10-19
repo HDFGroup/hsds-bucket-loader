@@ -22,9 +22,7 @@ def ensure_folder(pathname):
     tgt_path = tgt_folder
     if not pathname.startswith(tgt_path):
         return False
-    if hsds_local:
-        endpoint=hsds_local
-    elif hsds_global:
+   if hsds_global:
         endpoint=hsds_global
     else:
         endpoint=None
@@ -80,9 +78,7 @@ def load_file(filename):
     if config.get("public_read"):
         # make public read, and get acl
         print("adding public read ACL")
-        if hsds_local:
-            endpoint=hsds_local
-        elif hsds_global:
+        if hsds_global:
             endpoint=hsds_global
         else:
             endpoint=None
