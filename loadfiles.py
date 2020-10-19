@@ -56,13 +56,6 @@ def load_file(filename):
 
     # make sure the local hsds is up (if being used)
     if hsds_local:
-        state = None
-        while state != "READY":
-            print("load_file waiting on local hsds READY")
-            time.sleep(1)
-            info = h5pyd.getServerInfo(endpoint=hsds_local)
-            if info and 'state' in info:
-                state = info['state']
         endpoint = hsds_local
     else:
         endpoint = hsds_global
@@ -112,13 +105,25 @@ def load_file(filename):
 loglevel = logging.ERROR
 logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 
+# make sure the local hsds is up (if being used)
+if hsds_local:
+    state = None
+    while state != "READY":
+        print("waiting on local hsds READY")
+        time.sleep(1)
+        info = h5pyd.getServerInfo(endpoint=hsds_local)
+        if info and 'state' in info:
+            state = info['state']
+    print("local hsds in in read state")
+
+
 f = h5pyd.File(inventory_domain, "r+", use_cache=False, endpoint=hsds_global, username=username, password=password)
 
 table = f["inventory"]
 print("table.nrows:", table.nrows)
 for i in range(table.nrows):
     row = table[i]
-    print(f"row[{i}: {row}")
+    print(f"row[{i}]: {row}")
 
 condition = "start == 0"  # query for files that haven't been proccessed
 
