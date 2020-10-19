@@ -10,7 +10,7 @@ HSDS (see: https://github.com/HDFGroup/hsds) is a web service that enables effic
 
 On the other hand, if you have 1000's of files which may be GB's in size, this project provides a way to efficiently perform the ingestion using Kubernetes.
 
-This tool was tested using AWS S3 and AWS EKS (managed Kubernetes for AWS), but should work with any Kubernetes cluster with files that are stored in an AWS S3 API compatiblituy storage system (e.g. OpenIO or Scality).
+This tool was tested using AWS S3 and AWS EKS (managed Kubernetes for AWS), but should work with any Kubernetes cluster with files that are stored in an AWS S3 API compatible storage system (e.g. OpenIO or Scality).
 
 This tool supports either ingesting the source files meta-data and data (link_files in config.yml is False) or just ingesting the meta-data (link_files is True).  The former will typically require about the same amount of storage as was used for the source HDF5 files.  The link mode will used much less storage, but will instead store the chunk locations in the source files.  Clients accessing the content via HSDS will get the same results either way.
 
