@@ -11,11 +11,15 @@ src_suffix = config.get("src_suffix")
 tgt_folder = config.get("tgt_folder")
 tgt_bucket = config.get("tgt_bucket")
 hsds_local = config.get("hsds_local")
+print("hsds_local:", hsds_local)
 hsds_global = config.get("hsds_global")
+print("hsds_global:", hsds_global)
 link_files = config.get("link_files")
+print("link_files:", link_files)
 username = config.get("hs_username")
 password = config.get("hs_password")
 inventory_domain = config.get("inventory_domain")
+print("inventory_domain:", inventory_domain)
 sleep_time = config.get("watchdog_sleep_time")
 
 def ensure_folder(pathname):
@@ -113,7 +117,7 @@ def load_file(filename):
 loglevel = logging.ERROR
 logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 
-f = h5pyd.File(inventory_domain, "a", use_cache=False, endpoint=hsds_global, username=username, password=password)
+f = h5pyd.File(inventory_domain, "r+", use_cache=False, endpoint=hsds_global, username=username, password=password)
 
 table = f["inventory"]
 
