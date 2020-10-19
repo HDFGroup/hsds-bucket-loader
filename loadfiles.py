@@ -49,6 +49,16 @@ def load_file(filename):
     ensure_folder(os.path.dirname(tgt_path))  # tbd ignore 409 errors?
     # using s3path: s3://hdf5.sample/data/hdf5test/snp500.h5
     # run hsload on the s3 uri
+
+    # make sure the local hsds is up (if being used)
+    if hsds_local:
+        state = None
+        while state != "READY":
+            print("load_file waiting on local hsds READY")
+            time.sleep(1)
+            info = h5pyd.getServerInfo(endpoint=hsds_local)
+            if info and 'state' in info:
+                state = info['state']
     hsload_args = ["hsload",]
     if hsds_local:
         hsload_args.append("--endpoint")
