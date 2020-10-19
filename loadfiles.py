@@ -22,7 +22,7 @@ def ensure_folder(pathname):
     tgt_path = tgt_folder
     if not pathname.startswith(tgt_path):
         return False
-   if hsds_global:
+    if hsds_global:
         endpoint=hsds_global
     else:
         endpoint=None
