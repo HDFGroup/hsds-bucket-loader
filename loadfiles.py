@@ -63,13 +63,12 @@ def load_file(filename):
             info = h5pyd.getServerInfo(endpoint=hsds_local)
             if info and 'state' in info:
                 state = info['state']
+        endpoint = hsds_local
+    else:
+        endpoint = hsds_global
     hsload_args = ["hsload",]
-    if hsds_local:
-        hsload_args.append("--endpoint")
-        hsload_args.append(hsds_local)
-    elif hsds_global:
-        hsload_args.append("--endpoint")
-        hsload_args.append(hsds_global)
+    hsload_args.append("--endpoint")
+    hsload_args.append(endpoint)
     if username:
         hsload_args.append("--username")
         hsload_args.append(username)
@@ -92,11 +91,7 @@ def load_file(filename):
     if config.get("public_read"):
         # make public read, and get acl
         print("adding public read ACL")
-        if hsds_global:
-            endpoint=hsds_global
-        else:
-            endpoint=None
-        f = h5pyd.File(tgt_path, "a", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
+        f = h5pyd.File(tgt_path, "r+", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
         acl = {"userName": "default"}
         acl["create"] = False
         acl["read"] = True
@@ -120,6 +115,10 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 f = h5pyd.File(inventory_domain, "r+", use_cache=False, endpoint=hsds_global, username=username, password=password)
 
 table = f["inventory"]
+print("table.nrows:", table.nrows)
+for i in range(table.nrows):
+    row = table[i]
+    print(f"row[{i}: {row}")
 
 condition = "start == 0"  # query for files that haven't been proccessed
 

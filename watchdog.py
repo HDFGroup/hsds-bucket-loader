@@ -27,7 +27,7 @@ def keys(bucket_name, prefix='/', delimiter='/', start_after=''):
 
 def watch_bucket():
     print(f"watching bucket: {src_bucket}, prefix: {src_prefix}")
-    f = h5pyd.File(inventory_domain, "a", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
+    f = h5pyd.File(inventory_domain, "r+", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
     table = f["inventory"]
     for key in keys(src_bucket, prefix=src_prefix):
         if src_suffix and not key.endswith(src_suffix):
