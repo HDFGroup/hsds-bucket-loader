@@ -17,3 +17,43 @@ Overview
 The following diagram shows the components used by the bucket loader:
 
 ![Diagram1](https://github.com/HDFGroup/hsds-bucket-loader/blob/master/images/diagram.png)
+
+In the diagram, the blue lines represent read/write operations from a pod or script to/from a S3 Bucket or a HSDS domain (equivlent to a HDF5 file).
+
+Diagram Legend:
+
+* src_bucket: The S3 bucket containing HDF5 files to be ingested
+* make_inventory.py: A Python script the intializes the inventory file 
+* dump_inventory.py: A Python script that prints the current inventory state
+* Inventory.h5: A HSDS domain that contains a list of HDF5 files to be ingested along with start and finish times for the ingestion
+* watcher: A Kubernetes pod that continually scans the src_bucket and adds rows to the intventory file for any files that are not already listed
+* loader: Kuberntes pod(s) that select a row from inventory (updating the start time as it does) and runs hsload on the file
+* tgt_bucket: The S3 bucket that will contain the ingested data
+* HSDS: Kubernetes pod(s) that run the HSDS service
+
+The number of loader pods can be scaled up or down to increase or decrease the ingestion time.  Each laoder pod has containers to run it's own HSDS, so it's not necessary to scale up the cluster HSDS when the number of loader pods is scaled up.  The cluster HSDS is just used for reading and writing to the inventory file.
+
+Setting up the bucket loader
+----------------------------
+
+1. If you don't already have a Kubernetes cluster, set one up either manually or with AWS EKS 
+2. Install and configure kubectl on the machine being used for the installation
+3. Install h5pyd on the the machine being used for the installation (pip install h5pyd)
+4. Install HSDS on the cluster.  See: https://github.com/HDFGroup/hsds/blob/master/docs/kubernetes_install_aws.md 
+5. Run k8s_make_secrets.sh to create Kubernetes secrests to store AWS credentials and HSDS username and password (the HSDS username will be the owner of the created HSDS domains)
+6. Review and modify as needed the config.yml file in this project.  Adjust for your bucket location, HSDS endpoint, etc.
+7. Run make_configmap.sh to create a Kubernetes ConfigMap that will store the config file settings
+8. Make sure the tgt_folder specified in the config file exists in HSDS (use hstouch to create any needed folders)
+9. Run make_inventory_file.py to create the initial inventory domain
+10. Run `kubectl apply -f k8s_watch_deployment.yml` to launch the watcher pod
+11. Veify the pod starts correctly: `kubectl get pods` should show the pod in a running state
+12. If you run dump_inventory_file.py now, you should see all the source HDF5 files listed
+13. Run `kubectl apply -f k8s_load_deployment.yml` to launch the loader pod, verify it comes up correctly
+14. As the loader pod ingest files, you should see the start and stop times for each file get updated
+15. Use the hsls utility to verify that the corresponding HSDS domains are being created
+16. To speed up the loading, increase the number of loader pods: `kubectl --replicas=n deployment/hsds-bucket-loader` where n is the number of pods desired.  Increase the size of the cluster if you see pods are not getting scheduled
+17. Once the ingestion is complete you can either delete the deploment (e.g. kubectl delete deployment hsds-bucket-loader) or reduce the number of loader pods to a level sufficient to keep up with the rate at which new files are being added to the src bucket.
+
+
+
+
