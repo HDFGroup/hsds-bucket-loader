@@ -31,9 +31,9 @@ kubectl create secret generic hs-loader-keys --from-file=/tmp/aws_access_key_id 
 
 
 # delete the temp files
-#rm /tmp/aws_access_key_id
-#rm /tmp/aws_secret_access_key
-# rm /tmp/hs_username
-# rm /tmp/hs_password
-#rm /tmp/user-password.txt
+rm /tmp/aws_access_key_id
+rm /tmp/aws_secret_access_key
+rm /tmp/hs_username
+rm /tmp/hs_password
+rm /tmp/user-password.txt
 

@@ -1,19 +1,16 @@
 # bucket loader configuration
 tgt_bucket: null    # destination bucket for ingested countent - default bucket of HSDS if not set
-tgt_folder: /home/john/bucketloader/files/qubert/  
-src_bucket: qubert    # S3 bucket to scan for HDF5 files
-src_prefix: /     # prefix to use for listing files (if null, will list all objects in bucket)
-src_suffix: h5       # Source suffix to use (if null all objects will be loaded)
-link_files: true   # link to source HDF5 on S3 for dataset data 
-inventory_domain: /home/john/bucketloader/inventory.h5
-hs_username: null
-hs_password: null  # overide with environment variable or command line arg
-public_read: true   # make domains public read
-aws_s3_gateway: http://s3.us-west-2.amazonaws.com
-# hsds_global:  http://host.docker.internal:8080
-# hsds_global:  http://localhost:8080
+tgt_folder: SupplyCorrectValue  # HSDS folder path - should start and end with slash '/'  
+src_bucket: SupplyCorrectValue   # S3 bucket to scan for HDF5 files
+src_prefix: /     # prefix to use for listing files in src bucket (if null, will list all objects in bucket)
+src_suffix: h5    # Source suffix to use (if null all objects will be loaded)
+link_files: true  # link to source HDF5 on S3 for dataset data, set to false to ingest all data
+inventory_domain: SupplyCorectValue # the HSDS domain used to store the inventory information
+hs_username: null  # This value should be supplied by a Kubernetes secret or environment variable
+hs_password: null  # This value should be supplied by a Kubernetes secret or environment variable
+public_read: true  # make domains public read, if false, only the hs_username user will have access
+aws_s3_gateway: http://s3.us-west-2.amazonaws.com  # change to reflect region of S3 buckets
 hsds_global: http://10.100.0.136:5101  # run: set the IP here to the CLUSTER_IP you get when running kubectl get service hsds
-# hsds_local:  http://host.docker.internal
-hsds_local: http://localhost:5101
-aws_region: us-west-2
-watchdog_sleep_time: 60 
+hsds_local: http://localhost:5101  # this is the pod-local address, set to null if running loader outside of kubernetes
+aws_region: us-west-2  # change to reflect AWS region you are running in
+watchdog_sleep_time: 60  # time the watchdog sleeps between checking for new HDF5 files

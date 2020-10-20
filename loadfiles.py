@@ -51,8 +51,6 @@ def load_file(filename):
     tgt_path = tgt_folder + filename
     print(f"tgt_path: {tgt_path}")
     ensure_folder(os.path.dirname(tgt_path))  # tbd ignore 409 errors?
-    # using s3path: s3://hdf5.sample/data/hdf5test/snp500.h5
-    # run hsload on the s3 uri
 
     # make sure the local hsds is up (if being used)
     if hsds_local:
