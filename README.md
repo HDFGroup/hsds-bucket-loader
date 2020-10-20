@@ -50,7 +50,7 @@ Setting up the bucket loader
 9. Make sure the tgt_folder specified in the config file exists in HSDS (use hstouch to create any needed folders)
 10. Run make_inventory_file.py to create the initial inventory domain
 11. Run `kubectl apply -f k8s_watch_deployment.yml` to launch the watcher pod
-12. Veify the pod starts correctly: `kubectl get pods` should show the pod in a running state
+12. Verify the pod starts correctly: `kubectl get pods` should show the pod in a running state
 13. If you run dump_inventory_file.py now, you should see all the source HDF5 files listed
 14. Run `kubectl apply -f k8s_load_deployment.yml` to launch the loader pod, verify it comes up correctly
 15. As the loader pod ingest files, you should see the start and stop times for each file get updated in the dump inventory output
