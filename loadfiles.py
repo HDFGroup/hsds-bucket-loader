@@ -21,6 +21,10 @@ password = config.get("hs_password")
 inventory_domain = config.get("inventory_domain")
 print("inventory_domain:", inventory_domain)
 sleep_time = config.get("watchdog_sleep_time")
+if "POD_NAME" in os.environ:
+    pod_name = os.environ["POD_NAME"]
+else:
+    pod_name = ""
 
 def ensure_folder(pathname):
     tgt_path = tgt_folder
@@ -127,7 +131,7 @@ condition = "start == 0"  # query for files that haven't been proccessed
 
 while True:
     now = int(time.time())
-    update_val = {"start": now}
+    update_val = {"start": now, "pod_name": pod_name}
     # query for row with 0 start value and update it to now
     indices = table.update_where(condition, update_val, limit=1)
     print("indices:", indices)

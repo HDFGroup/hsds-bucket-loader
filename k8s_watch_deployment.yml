@@ -19,6 +19,13 @@ spec:
           name: bucket-watch
           image: hdfgroup/bucket_loader:latest
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "128M"
+              cpu: "128m"
+            limits:
+              memory: "256M"
+              cpu: "125m"
           volumeMounts:
           - name: bucket-config
             mountPath: "/config/config.yml"

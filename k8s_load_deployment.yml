@@ -19,6 +19,13 @@ spec:
           name: bucket-load
           image: hdfgroup/bucket_loader
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "256M"
+              cpu: "250m"
+            limits:
+              memory: "512M"
+              cpu: "500m"
           volumeMounts:
           - name: bucket-config
             mountPath: "/config/config.yml"
@@ -48,10 +55,21 @@ spec:
               secretKeyRef:
                 name: hs-loader-keys
                 key: hs_password
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
         -
           name: head
           image: hdfgroup/hsds
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "128M"
+              cpu: "125m"
+            limits:
+              memory: "256M"
+              cpu: "250m"
           volumeMounts:
           - name: accounts
             mountPath: "/config/passwd.txt"
@@ -90,6 +108,13 @@ spec:
           name: sn
           image: hdfgroup/hsds
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "256M"
+              cpu: "250m"
+            limits:
+              memory: "512M"
+              cpu: "500m"
           volumeMounts:
           - name: accounts
             mountPath: "/config/passwd.txt"
@@ -126,6 +151,13 @@ spec:
           name: dn
           image: hdfgroup/hsds
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "256M"
+              cpu: "250m"
+            limits:
+              memory: "512M"
+              cpu: "500m"
           volumeMounts:
           - name: accounts
             mountPath: "/config/passwd.txt"

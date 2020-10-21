@@ -5,7 +5,7 @@ src_bucket: SupplyCorrectValue   # S3 bucket to scan for HDF5 files
 src_prefix: /     # prefix to use for listing files in src bucket (if null, will list all objects in bucket)
 src_suffix: h5    # Source suffix to use (if null all objects will be loaded)
 link_files: true  # link to source HDF5 on S3 for dataset data, set to false to ingest all data
-inventory_domain: SupplyCorectValue # the HSDS domain used to store the inventory information
+inventory_domain: /home/john/bucketloader/inventory.h5 # the HSDS domain used to store the inventory information
 hs_username: null  # This value should be supplied by a Kubernetes secret or environment variable
 hs_password: null  # This value should be supplied by a Kubernetes secret or environment variable
 public_read: true  # make domains public read, if false, only the hs_username user will have access

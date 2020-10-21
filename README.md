@@ -55,7 +55,7 @@ Setting up the bucket loader
 14. Run `kubectl apply -f k8s_load_deployment.yml` to launch the loader pod, verify it comes up correctly
 15. As the loader pod ingest files, you should see the start and stop times for each file get updated in the dump inventory output
 16. Use the hsls utility to verify that the corresponding HSDS domains are being created
-17. To speed up the loading process, increase the number of loader pods: `kubectl --replicas=n deployment/hsds-bucket-loader` where n is the number of pods desired.  Increasing the size of the cluster may be necessary if you see pods that are not getting scheduled
+17. To speed up the loading process, increase the number of loader pods: `kubectl scale --replicas=n deployment/hsds-bucket-loader` where n is the number of pods desired.  Increasing the size of the cluster may be necessary if you see pods that are not getting scheduled
 18. Once the ingestion is complete you can either delete the deploment (e.g. `kubectl delete deployment hsds-bucket-loader`) or reduce the number of loader pods to a level sufficient to keep up with the rate at which new files are showing up in the src bucket.
 
 

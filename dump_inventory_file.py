@@ -9,7 +9,7 @@
 # distribution tree.  If you do not have access to this file, you may        #
 # request a copy from help@hdfgroup.org.                                     #
 ##############################################################################
-import sys
+
 from datetime import datetime
 import tzlocal
 import h5pyd
@@ -30,7 +30,7 @@ inventory_domain = config.get("inventory_domain")
 f = h5pyd.File(inventory_domain, "r", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
 print(f"{inventory_domain} found, owner: {f.owner}, last madified: {formatTime(f.modified)}")
 print("Contents")
-print("\tFilename\t\tStart\t\t\tDone")
+print("\tFilename\t\tStart\t\t\tDone\trc\tpod")
 print("-"*80)
 table = f["inventory"]
 for row in table:
@@ -43,5 +43,7 @@ for row in table:
         stop = formatTime(row[2])
     else:
         stop = 0
-    print(f"\t{filename}\t{start}\t{stop}")
+    rc = row[3]
+    podname = row[4].decode('utf-8')
+    print(f"\t{filename}\t{start}\t{stop}\t{rc}\t{podname}")
 print(f"{table.nrows} rows")
