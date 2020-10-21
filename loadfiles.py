@@ -97,10 +97,7 @@ def load_file(filename):
         f.putACL(acl)
         f.close()
 
-    if rc.returncode == 0:
-        return True
-    else:
-        return False
+    return rc.returncode
 
 ### main
 
@@ -142,12 +139,16 @@ while True:
         row = table[index]
         print("got row:", row)
         filename = row[0].decode("utf-8")
-        if load_file(filename):
+        rc = load_file(filename)
+        if rc == 0:
             print(f"marking conversion of {filename} complete")
-            row[2] = int(time.time())
-            table[index] = row
         else:
             print(f"load_file {filename} failed")
+
+        # update inventory table
+        row[2] = int(time.time())
+        row[3] = rc
+        table[index] = row
 
     else:
         # no available rows

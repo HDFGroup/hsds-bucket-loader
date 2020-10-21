@@ -18,7 +18,7 @@ spec:
         -
           name: bucket-load
           image: hdfgroup/bucket_loader
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "256M"
@@ -62,7 +62,7 @@ spec:
         -
           name: head
           image: hdfgroup/hsds
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "128M"
@@ -107,7 +107,7 @@ spec:
         -
           name: sn
           image: hdfgroup/hsds
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "256M"
@@ -150,7 +150,7 @@ spec:
         -
           name: dn
           image: hdfgroup/hsds
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "256M"

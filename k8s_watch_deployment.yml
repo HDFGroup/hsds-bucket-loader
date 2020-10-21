@@ -17,12 +17,12 @@ spec:
       containers:
         -
           name: bucket-watch
-          image: hdfgroup/bucket_loader:latest
-          imagePullPolicy: IfNotPresent
+          image: hdfgroup/bucket_loader
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "128M"
-              cpu: "128m"
+              cpu: "125m"
             limits:
               memory: "256M"
               cpu: "125m"
