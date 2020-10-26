@@ -80,8 +80,10 @@ def load_file(filename):
     print(f"running hsload {s3path} {tgt_path}")
     rc = subprocess.run(hsload_args)
     if rc.returncode > 0:
-        logging.error(f"load_file error for {filename}")
-        return False
+        logging.error(f"hsload error for {filename}")
+        return rc.returncode
+    else:
+        print(f"hsload rc: {rc.returncode}")
 
     if config.get("public_read"):
         # make public read, and get acl
@@ -120,15 +122,12 @@ f = h5pyd.File(inventory_domain, "r+", use_cache=False, endpoint=hsds_global, us
 
 table = f["inventory"]
 print("table.nrows:", table.nrows)
-for i in range(table.nrows):
-    row = table[i]
-    print(f"row[{i}]: {row}")
 
 condition = "start == 0"  # query for files that haven't been proccessed
 
 while True:
     now = int(time.time())
-    update_val = {"start": now, "pod_name": pod_name}
+    update_val = {"start": now, "status": -1, "pod_name": pod_name}
     # query for row with 0 start value and update it to now
     indices = table.update_where(condition, update_val, limit=1)
     print("indices:", indices)

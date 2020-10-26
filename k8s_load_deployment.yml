@@ -17,8 +17,8 @@ spec:
       containers:
         -
           name: bucket-load
-          image: hdfgroup/bucket_loader
-          imagePullPolicy: Always
+          image: hdfgroup/bucket_loader:v0.1a
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               memory: "256M"
@@ -61,8 +61,8 @@ spec:
                 fieldPath: metadata.name
         -
           name: head
-          image: hdfgroup/hsds
-          imagePullPolicy: Always
+          image: hdfgroup/hsds:v0.6.1a
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               memory: "128M"
@@ -106,8 +106,8 @@ spec:
                 key: aws_secret_access_key
         -
           name: sn
-          image: hdfgroup/hsds
-          imagePullPolicy: Always
+          image: hdfgroup/hsds:v0.6.1a
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               memory: "256M"
@@ -149,8 +149,8 @@ spec:
                 key: aws_secret_access_key
         -
           name: dn
-          image: hdfgroup/hsds
-          imagePullPolicy: Always
+          image: hdfgroup/hsds:v0.6.1a
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               memory: "256M"
