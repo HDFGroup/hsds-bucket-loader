@@ -26,12 +26,9 @@ def main():
         print("domain folder must start and end with '/")
         printUsage()
 
-    print("delete:", folder_path)
-
     folder = h5pyd.Folder(folder_path, mode='r+')
     domains = []
     for domain in folder:
-        print(domain)
         domains.append(domain)
 
     for domain in domains:
