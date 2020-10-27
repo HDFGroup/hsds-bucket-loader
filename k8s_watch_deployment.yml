@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         -
-          name: bucket-watch
-          image: hdfgroup/bucket_loader:v01.b
+          name: watch
+          image: hdfgroup/bucket_loader:v0.1d
           imagePullPolicy: IfNotPresent
           resources:
             requests:
