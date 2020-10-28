@@ -1,9 +1,11 @@
 import time
 import os
 import logging
-import subprocess
+import s3fs
+import h5py
 import h5pyd
 import config
+from utillib import load_file
 
 src_bucket = config.get("src_bucket")
 src_prefix = config.get("src_prefix")
@@ -46,7 +48,8 @@ def ensure_folder(pathname):
     return True
 
 
-def load_file(filename):
+def load(filename):
+    verbose = True
     print(f"load_file: {filename}")
     print(f"got filename: {filename} from {inventory_domain}")
     # got filename: data/hdf5test/snp500.h5 from /home/john/bucketloader/inventory.h5
@@ -61,6 +64,8 @@ def load_file(filename):
         endpoint = hsds_local
     else:
         endpoint = hsds_global
+
+    """
     hsload_args = ["hsload",]
     hsload_args.append("--endpoint")
     hsload_args.append(endpoint)
@@ -77,13 +82,40 @@ def load_file(filename):
         hsload_args.append("--link")
     hsload_args.append(s3path)
     hsload_args.append(tgt_path)
-    print(f"running hsload {s3path} {tgt_path}")
-    rc = subprocess.run(hsload_args)
-    if rc.returncode > 0:
-        logging.error(f"hsload error for {filename}")
-        return rc.returncode
-    else:
-        print(f"hsload rc: {rc.returncode}")
+    """
+
+    print(f"running loading {s3path} to {tgt_path}")
+    s3 = s3fs.S3FileSystem()
+
+    try:
+        fin = h5py.File(s3.open(s3path, "rb"), "r")
+    except IOError as ioe:
+        logging.error("Error opening s3path {}: {}".format(s3path, ioe))
+        return 1
+
+    # create output domain
+    try:
+        fout = h5pyd.File(tgt_path, 'w', endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
+    except IOError as ioe:
+        if ioe.errno == 404:
+            logging.error("Domain: {} not found".format(tgt_path))
+        elif ioe.errno == 403:
+            logging.error("No write access to domain: {}".format(tgt_path))
+        else:
+            logging.error("Error creating file {}: {}".format(tgt_path, ioe))
+
+    # do the actual load
+    try:
+        if link_files:
+            dataload = "link"
+        else:
+            dataload = "ingest"
+        compression=None  # TBD
+        compression_opts=None # TBD
+        load_file(fin, fout, verbose=verbose, dataload=dataload, s3path=s3path, compression=compression, compression_opts=compression_opts)
+    except IOError as ioe:
+        logging.error("load_file error: {}".format(ioe))
+        return 1
 
     if config.get("public_read"):
         # make public read, and get acl
@@ -99,7 +131,7 @@ def load_file(filename):
         f.putACL(acl)
         f.close()
 
-    return rc.returncode
+    return 0 
 
 ### main
 
@@ -138,7 +170,7 @@ while True:
         row = table[index]
         print("got row:", row)
         filename = row[0].decode("utf-8")
-        rc = load_file(filename)
+        rc = load(filename)
         if rc == 0:
             print(f"marking conversion of {filename} complete")
         else:
