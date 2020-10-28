@@ -649,11 +649,17 @@ def load_file(fin, fout, verbose=False, dataload="ingest", s3path=None, compress
     ctx["srcid_desobj_map"] = {}
 
     def copy_attribute_helper(name, obj):
-        tgt = fout[name]
-        for a in obj.attrs:
-            copy_attribute(tgt, a, obj, ctx)
+        logging.info("copy_attribute_helper name: {} for object: {}".format(name, obj.name))
+        try:
+            tgt = fout[name]
+            for a in obj.attrs:
+                copy_attribute(tgt, a, obj, ctx)
+        except KeyError:
+            logging.error("object missing")
 
     def object_create_helper(name, obj):
+        logging.info("object_create_helper name: {} for object: {}".format(name, obj.name))
+
         class_name = obj.__class__.__name__
         if class_name in ("Dataset", "Table"):
             create_dataset(obj, ctx)
@@ -664,7 +670,7 @@ def load_file(fin, fout, verbose=False, dataload="ingest", s3path=None, compress
 
     def object_link_helper(name, obj):
         class_name = obj.__class__.__name__
-        logging.debug("object_link_helper for object: {}".format(obj.name))
+        logging.info("object_link_helper name: {} for object: {}".format(name, obj.name))
         if class_name == "Group":
             # create any soft/external links
             fout = ctx["fout"]
@@ -673,7 +679,7 @@ def load_file(fin, fout, verbose=False, dataload="ingest", s3path=None, compress
 
     def object_copy_helper(name, obj):
         class_name = obj.__class__.__name__
-        logging.debug("object_copy_helper for object: {}".format(obj.name))
+        logging.info("object_copy_helper name: {} for object: {}".format(name, obj.name))
 
         if class_name in ("Dataset", "Table"):
             if ctx["dataload"] == "link" and not is_vlen(obj.dtype) and not is_compact(obj):
