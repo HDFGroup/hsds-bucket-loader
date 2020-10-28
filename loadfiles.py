@@ -157,33 +157,31 @@ print("table.nrows:", table.nrows)
 
 condition = "start == 0"  # query for files that haven't been proccessed
 
-while True:
-    now = int(time.time())
-    update_val = {"start": now, "status": -1, "pod_name": pod_name}
-    # query for row with 0 start value and update it to now
-    indices = table.update_where(condition, update_val, limit=1)
-    print("indices:", indices)
+now = int(time.time())
+update_val = {"start": now, "status": -1, "pod_name": pod_name}
+# query for row with 0 start value and update it to now
+indices = table.update_where(condition, update_val, limit=1)
+print("indices:", indices)
 
-    if indices is not None and len(indices) > 0:
-        index = indices[0]
-        print(f"getting row: {index}")
-        row = table[index]
-        print("got row:", row)
-        filename = row[0].decode("utf-8")
-        rc = load(filename)
-        if rc == 0:
-            print(f"marking conversion of {filename} complete")
-        else:
-            print(f"load_file {filename} failed")
-
-        # update inventory table
-        row[2] = int(time.time())
-        row[3] = rc
-        table[index] = row
-
+if indices is not None and len(indices) > 0:
+    index = indices[0]
+    print(f"getting row: {index}")
+    row = table[index]
+    print("got row:", row)
+    filename = row[0].decode("utf-8")
+    rc = load(filename)
+    print(f"load({filename} complete rc: {rc}")
+    if rc == 0:
+        print(f"marking conversion of {filename} complete")
     else:
-        # no available rows
-        print("sleeping")
-        time.sleep(sleep_time)   # sleep for a bit to avoid endless restarts
-logging.error("Unexpected exit")
+        print(f"load_file {filename} failed")
+
+    # update inventory table
+    row[2] = int(time.time())
+    row[3] = rc
+    table[index] = row
+else:
+    # no available rows
+    print("sleeping")
+    time.sleep(sleep_time)   # sleep for a bit to avoid endless restarts
 print('exit')
