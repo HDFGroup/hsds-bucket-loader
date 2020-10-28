@@ -11,6 +11,7 @@ RUN pip install boto3
 RUN mkdir /app
 COPY loadfiles.py /app
 COPY utillib.py /app
+COPY chunkiter.py /app
 COPY watchdog.py /app
 COPY dump_inventory_file.py /app
 COPY make_inventory_file.py /app
