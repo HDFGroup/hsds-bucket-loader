@@ -17,7 +17,7 @@ spec:
       containers:
         -
           name: load
-          image: hdfgroup/bucket_loader:v0.1e
+          image: hdfgroup/bucket_loader:v0.1f
           imagePullPolicy: IfNotPresent
           resources:
             requests:
