@@ -723,11 +723,6 @@ def load_file(fin, fout, verbose=False, dataload="ingest", s3path=None, compress
     for ga in fin.attrs:
         copy_attribute(fout, ga, fin, ctx)
 
-    # Fully flush the h5py handle.
-    fout.close()
-
-    # close up the source domain, see reason(s) for this below
-    fin.close()
     msg = "load_file complete"
     logging.info(msg)
     if verbose:
