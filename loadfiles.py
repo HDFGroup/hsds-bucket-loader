@@ -120,7 +120,6 @@ def load(filename):
     if config.get("public_read"):
         # make public read, and get acl
         print("adding public read ACL")
-        f = h5pyd.File(tgt_path, "r+", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
         acl = {"userName": "default"}
         acl["create"] = False
         acl["read"] = True
@@ -128,8 +127,9 @@ def load(filename):
         acl["delete"] = False
         acl["readACL"] = True
         acl["updateACL"] = False
-        f.putACL(acl)
-        f.close()
+        fout.putACL(acl)
+        
+    fout.close()
 
     return 0 
 
