@@ -17,7 +17,7 @@ spec:
       containers:
         -
           name: load
-          image: hdfgroup/bucket_loader:v0.1i.debug
+          image: hdfgroup/bucket_loader:v0.1j.debug
           imagePullPolicy: IfNotPresent
           resources:
             requests:
