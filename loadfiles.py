@@ -160,37 +160,40 @@ condition = "start == 0"  # query for files that haven't been proccessed
 
 now = int(time.time())
 update_val = {"start": now, "status": -1, "pod_name": pod_name}
-# query for row with 0 start value and update it to now
-indices = table.update_where(condition, update_val, limit=1)
-print("indices:", indices)
 
-if indices is not None and len(indices) > 0:
-    index = indices[0]
-    print(f"getting row: {index}")
-    row = table[index]
-    print("got row:", row)
-    filename = row[0].decode("utf-8")
-    rc = 1
-    try:
-        load(filename)
-        print(f"load({filename} - complete - no errors")
-        rc = 0
-    except IOError as ioe:
-        print(f"load({filename} - IOError: {ioe}")
-    except Exception as e:
-        print(f"load({filename} - Unexpected exception: {e}") 
+while True:
+    # query for row with 0 start value and update it to now
+    indices = table.update_where(condition, update_val, limit=1)
+    print("indices:", indices)
 
-    if rc == 0:
-        print(f"marking conversion of {filename} complete")
+
+    if indices is not None and len(indices) > 0:
+        index = indices[0]
+        print(f"getting row: {index}")
+        row = table[index]
+        print("got row:", row)
+        filename = row[0].decode("utf-8")
+        rc = 1
+        try:
+            load(filename)
+            print(f"load({filename} - complete - no errors")
+            rc = 0
+        except IOError as ioe:
+            print(f"load({filename} - IOError: {ioe}")
+        except Exception as e:
+            print(f"load({filename} - Unexpected exception: {e}") 
+
+        if rc == 0:
+            print(f"marking conversion of {filename} complete")
+        else:
+            print(f"conversion {filename} failed")
+
+        # update inventory table
+        row[2] = int(time.time())
+        row[3] = rc
+        table[index] = row
     else:
-        print(f"conversion {filename} failed")
-
-    # update inventory table
-    row[2] = int(time.time())
-    row[3] = rc
-    table[index] = row
-else:
-    # no available rows
-    print("sleeping")
-    time.sleep(sleep_time)   # sleep for a bit to avoid endless restarts
+        # no available rows
+        print("sleeping")
+        time.sleep(sleep_time)   # sleep for a bit to avoid endless restarts
 print('exit')
