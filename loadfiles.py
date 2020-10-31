@@ -136,7 +136,7 @@ def load(filename):
 
 ### main
 
-loglevel = logging.DEBUG
+loglevel = config.get("log_level")
 logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 
 # make sure the local hsds is up (if being used)
