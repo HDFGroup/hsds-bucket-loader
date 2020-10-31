@@ -11,13 +11,12 @@
 ##############################################################################
 
 from datetime import datetime
-import tzlocal
 import h5pyd
 import config
 
 def formatTime(timestamp):
-    local_timezone = tzlocal.get_localzone() # get pytz timezone
-    local_time = datetime.fromtimestamp(timestamp, local_timezone)
+    # local_timezone = tzlocal.get_localzone() # get pytz timezone
+    local_time = datetime.fromtimestamp(timestamp) # , local_timezone)
     return local_time
 
 tgt_bucket = config.get("tgt_bucket")
@@ -28,9 +27,9 @@ endpoint = config.get("hsds_global")
 inventory_domain = config.get("inventory_domain")  
 
 f = h5pyd.File(inventory_domain, "r", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
-print(f"{inventory_domain} found, owner: {f.owner}, last madified: {formatTime(f.modified)}")
+print(f"{inventory_domain} found, owner: {f.owner}, last madified: {datetime.fromtimestamp(f.modified)}")
 print("Contents")
-print("\tFilename\t\tStart\t\t\tDone\trc\tpod")
+print("\tFilename\t\tStart\t\t\tDone\truntime\trc\tpod")
 print("-"*80)
 table = f["inventory"]
 for row in table:
@@ -45,5 +44,9 @@ for row in table:
         stop = 0
     rc = row[3]
     podname = row[4].decode('utf-8')
-    print(f"\t{filename}\t{start}\t{stop}\t{rc}\t{podname}")
+    if row[2] > 0:
+        runtime = f"{int(row[2] - row[1]) // 60:4d}m {(row[2] - row[1]) % 60:2}s"
+    else:
+        runtime = "0"
+    print(f"\t{filename}\t{start}\t{stop}\t{runtime}\t{rc}\t{podname}")
 print(f"{table.nrows} rows")

@@ -91,7 +91,7 @@ def load(filename):
         fin = h5py.File(s3.open(s3path, "rb"), "r")
     except IOError as ioe:
         logging.error("Error opening s3path {}: {}".format(s3path, ioe))
-        return 1
+        raise
 
     # create output domain
     try:
@@ -103,6 +103,7 @@ def load(filename):
             logging.error("No write access to domain: {}".format(tgt_path))
         else:
             logging.error("Error creating file {}: {}".format(tgt_path, ioe))
+        raise
 
     # do the actual load
     try:
@@ -115,12 +116,11 @@ def load(filename):
         load_file(fin, fout, verbose=verbose, dataload=dataload, s3path=s3path, compression=compression, compression_opts=compression_opts)
     except IOError as ioe:
         logging.error("load_file error: {}".format(ioe))
-        return 1
+        raise
 
     if config.get("public_read"):
         # make public read, and get acl
         print("adding public read ACL")
-        f = h5pyd.File(tgt_path, "r+", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
         acl = {"userName": "default"}
         acl["create"] = False
         acl["read"] = True
@@ -128,14 +128,15 @@ def load(filename):
         acl["delete"] = False
         acl["readACL"] = True
         acl["updateACL"] = False
-        f.putACL(acl)
-        f.close()
+        fout.putACL(acl)
+        
+    fout.close()
 
-    return 0 
+    return
 
 ### main
 
-loglevel = logging.DEBUG
+loglevel = config.get("log_level")
 logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 
 # make sure the local hsds is up (if being used)
@@ -159,29 +160,40 @@ condition = "start == 0"  # query for files that haven't been proccessed
 
 now = int(time.time())
 update_val = {"start": now, "status": -1, "pod_name": pod_name}
-# query for row with 0 start value and update it to now
-indices = table.update_where(condition, update_val, limit=1)
-print("indices:", indices)
 
-if indices is not None and len(indices) > 0:
-    index = indices[0]
-    print(f"getting row: {index}")
-    row = table[index]
-    print("got row:", row)
-    filename = row[0].decode("utf-8")
-    rc = load(filename)
-    print(f"load({filename} complete rc: {rc}")
-    if rc == 0:
-        print(f"marking conversion of {filename} complete")
+while True:
+    # query for row with 0 start value and update it to now
+    indices = table.update_where(condition, update_val, limit=1)
+    print("indices:", indices)
+
+
+    if indices is not None and len(indices) > 0:
+        index = indices[0]
+        print(f"getting row: {index}")
+        row = table[index]
+        print("got row:", row)
+        filename = row[0].decode("utf-8")
+        rc = 1
+        try:
+            load(filename)
+            print(f"load({filename} - complete - no errors")
+            rc = 0
+        except IOError as ioe:
+            print(f"load({filename} - IOError: {ioe}")
+        except Exception as e:
+            print(f"load({filename} - Unexpected exception: {e}") 
+
+        if rc == 0:
+            print(f"marking conversion of {filename} complete")
+        else:
+            print(f"conversion {filename} failed")
+
+        # update inventory table
+        row[2] = int(time.time())
+        row[3] = rc
+        table[index] = row
     else:
-        print(f"load_file {filename} failed")
-
-    # update inventory table
-    row[2] = int(time.time())
-    row[3] = rc
-    table[index] = row
-else:
-    # no available rows
-    print("sleeping")
-    time.sleep(sleep_time)   # sleep for a bit to avoid endless restarts
+        # no available rows
+        print("sleeping")
+        time.sleep(sleep_time)   # sleep for a bit to avoid endless restarts
 print('exit')

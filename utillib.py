@@ -402,7 +402,6 @@ def create_dataset(dobj, ctx):
             anon_dset = fout.create_dataset(None, shape=chunkinfo_arr_dims, dtype=dt)
             anon_dset[...] = chunkinfo_arr
             logging.debug("anon_dset: {}".format(anon_dset))
-            logging.debug("annon_values: {}".format(anon_dset[...]))
             chunks["class"] = 'H5D_CHUNKED_REF_INDIRECT'
             chunks["file_uri"] = ctx["s3path"]
             chunks["dims"] = dobj.chunks
@@ -723,11 +722,6 @@ def load_file(fin, fout, verbose=False, dataload="ingest", s3path=None, compress
     for ga in fin.attrs:
         copy_attribute(fout, ga, fin, ctx)
 
-    # Fully flush the h5py handle.
-    fout.close()
-
-    # close up the source domain, see reason(s) for this below
-    fin.close()
     msg = "load_file complete"
     logging.info(msg)
     if verbose:
