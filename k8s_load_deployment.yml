@@ -59,7 +59,7 @@ spec:
                 fieldPath: metadata.name
         -
           name: head
-          image: hdfgroup/hsds:v0.6.1a
+          image: hdfgroup/hsds:v0.6.1b
           imagePullPolicy: IfNotPresent
           resources:
             requests:
