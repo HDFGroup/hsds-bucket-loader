@@ -17,7 +17,7 @@ spec:
       containers:
         -
           name: load
-          image: hdfgroup/bucket_loader:v0.2a
+          image: hdfgroup/bucket_loader:v0.2b
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -59,7 +59,7 @@ spec:
                 fieldPath: metadata.name
         -
           name: head
-          image: hdfgroup/hsds:v0.6.1b
+          image: hdfgroup/hsds:v0.6.1a
           imagePullPolicy: IfNotPresent
           resources:
             requests:
