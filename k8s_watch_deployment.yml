@@ -22,10 +22,8 @@ spec:
           resources:
             requests:
               memory: "128M"
-              cpu: "125m"
             limits:
               memory: "256M"
-              cpu: "125m"
           volumeMounts:
           - name: bucket-config
             mountPath: "/config/config.yml"

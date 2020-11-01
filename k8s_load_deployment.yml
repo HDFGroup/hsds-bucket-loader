@@ -22,10 +22,8 @@ spec:
           resources:
             requests:
               memory: "256M"
-              cpu: "250m"
             limits:
               memory: "512M"
-              cpu: "500m"
           volumeMounts:
           - name: bucket-config
             mountPath: "/config/config.yml"
@@ -66,10 +64,8 @@ spec:
           resources:
             requests:
               memory: "128M"
-              cpu: "125m"
             limits:
               memory: "256M"
-              cpu: "250m"
           volumeMounts:
           - name: accounts
             mountPath: "/config/passwd.txt"
@@ -111,10 +107,8 @@ spec:
           resources:
             requests:
               memory: "256M"
-              cpu: "250m"
             limits:
               memory: "512M"
-              cpu: "500m"
           volumeMounts:
           - name: accounts
             mountPath: "/config/passwd.txt"
@@ -154,10 +148,8 @@ spec:
           resources:
             requests:
               memory: "256M"
-              cpu: "250m"
             limits:
               memory: "512M"
-              cpu: "500m"
           volumeMounts:
           - name: accounts
             mountPath: "/config/passwd.txt"
