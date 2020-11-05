@@ -53,7 +53,7 @@ def load(filename):
     print(f"load_file: {filename}")
     print(f"got filename: {filename} from {inventory_domain}")
     # got filename: data/hdf5test/snp500.h5 from /home/john/bucketloader/inventory.h5
-    s3path = f"s3://{src_bucket}{src_prefix}{filename}"
+    s3path = f"s3://{src_bucket}/{filename}"
     print(f"using s3path: {s3path}")
     tgt_path = tgt_folder + filename
     print(f"tgt_path: {tgt_path}")
