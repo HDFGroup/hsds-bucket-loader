@@ -136,17 +136,19 @@ f = h5pyd.File(inventory_domain, "r+", use_cache=False, endpoint=hsds_global, us
 
 table = f["inventory"]
 print("table.nrows:", table.nrows)
+print("table.dtype:", table.dtype)
 
-condition = "start == 0"  # query for files that haven't been proccessed
+condition = "loadstart == 0"  # query for files that haven't been proccessed
 
 while True:
 
     now = int(time.time())
-    update_val = {"start": now, "status": -1, "pod_name": pod_name}
+    update_val = {"loadstart": now, "loadstatus": -1, "loadpodname": pod_name}
 
 
     # query for row with 0 start value and update it to now
-    indices = table.update_where(condition, update_val, limit=1)
+    # indices = table.update_where(condition, update_val, limit=1)
+    indices = table.read_where(condition, limit=1)
     print("indices:", indices)
 
     if indices is not None and len(indices) > 0:
