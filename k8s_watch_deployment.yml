@@ -14,6 +14,7 @@ spec:
       labels:
         app: hsds-bucket-watch
     spec:
+      serviceAccountName: hsds-eks-policy
       containers:
         -
           name: watch
@@ -33,16 +34,6 @@ spec:
             value: watch
           - name: PASSWORD_FILE
             value: /config/passwd.txt
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: hs-loader-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: hs-loader-keys
-                key: aws_secret_access_key
           - name: HS_USERNAME
             valueFrom:
               secretKeyRef:
@@ -66,4 +57,3 @@ spec:
       - name: hsds-override
         configMap:
           name: hsds-override
-        
