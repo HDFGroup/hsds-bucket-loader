@@ -50,7 +50,7 @@ spec:
                 fieldPath: metadata.name
         -
           name: head
-          image: hdfgroup/hsds:v0.6.3g
+          image: hdfgroup/hsds:v0.6.3i
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -83,7 +83,7 @@ spec:
             value: /config/passwd.txt
         -
           name: sn
-          image: hdfgroup/hsds:v0.6.3g
+          image: hdfgroup/hsds:v0.6.3i
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -114,7 +114,7 @@ spec:
             value: /config/passwd.txt
         -
           name: dn
-          image: hdfgroup/hsds:v0.6.3g
+          image: hdfgroup/hsds:v0.6.3i
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -141,8 +141,32 @@ spec:
             value: http://localhost:5100
           - name: K8S_APP_LABEL
             value: null
-          - name: PASSWORD_FILE
-            value: /config/passwd.txt
+        -
+          name: rangeget
+          image: hdfgroup/hsds:v0.6.3i
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "256M"
+            limits:
+              memory: "256M"
+          volumeMounts:
+          - name: hsds-config
+            mountPath: "/config/config.yml"
+            subPath: config.yml
+          - name: hsds-override
+            mountPath: "/config/override.yml"
+            subPath: override.yml
+          ports:
+            -
+              containerPort: 6900
+          env:
+          - name: NODE_TYPE
+            value: rangeget
+          - name: HEAD_ENDPOINT
+            value: http://localhost:5100
+          - name: K8S_APP_LABEL
+            value: null
       volumes:
       - name: accounts
         secret:
