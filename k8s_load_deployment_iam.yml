@@ -14,6 +14,7 @@ spec:
       labels:
         app: hsds-bucket-loader
     spec:
+      serviceAccountName: hsds-eks-policy
       containers:
         -
           name: load
@@ -47,16 +48,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: head
           image: hdfgroup/hsds:v0.6.3i
@@ -90,16 +81,6 @@ spec:
             value: null
           - name: PASSWORD_FILE
             value: /config/passwd.txt
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: sn
           image: hdfgroup/hsds:v0.6.3i
@@ -131,16 +112,6 @@ spec:
             value: null
           - name: PASSWORD_FILE
             value: /config/passwd.txt
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: dn
           image: hdfgroup/hsds:v0.6.3i
@@ -170,16 +141,6 @@ spec:
             value: http://localhost:5100
           - name: K8S_APP_LABEL
             value: null
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: rangeget
           image: hdfgroup/hsds:v0.6.3i
@@ -206,16 +167,6 @@ spec:
             value: http://localhost:5100
           - name: K8S_APP_LABEL
             value: null
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
       volumes:
       - name: accounts
         secret:
