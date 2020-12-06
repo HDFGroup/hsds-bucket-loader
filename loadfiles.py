@@ -120,16 +120,19 @@ def load(filename):
 loglevel = config.get("log_level")
 logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 
-# make sure the local hsds is up (if being used)
-if hsds_local:
+# make sure the global (and local if set) hsds is up (if being used)
+for endpoint in (hsds_global, hsds_local):
+    if not endpoint:
+        print("local endpoint not set?")
+        continue
     state = None
     while state != "READY":
-        print("waiting on local hsds READY")
+        print(f"waiting on endpoint: {endpoint} to be in READY state")
         time.sleep(1)
-        info = h5pyd.getServerInfo(endpoint=hsds_local)
+        info = h5pyd.getServerInfo(endpoint=endpoint)
         if info and 'state' in info:
             state = info['state']
-    print("local hsds in in READY state")
+    print(f"endpoint: {endpoint} is in READY state")
 
 
 f = h5pyd.File(inventory_domain, "r+", use_cache=False, endpoint=hsds_global, username=username, password=password)
