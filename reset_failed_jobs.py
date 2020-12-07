@@ -67,7 +67,7 @@ for i in range(table.nrows):
         print(f"{filename} job started less than {elapse_time} minutes ago")
         continue
     print(f"resetting {filename}")
-    table[i] = (filename.encode('utf-8'), 0, 0, 0, "", 0, 0, 0, "")
+    table[i] = (filename.encode('utf-8'), 0, 0, 0, b"", 0, 0, 0, b"", b"")
     reset_count += 1
     
 print(f"done - reset {reset_count} load jobs")

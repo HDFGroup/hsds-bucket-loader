@@ -65,15 +65,15 @@ def diff(filename):
         raise
 
     # do the actual diff
-    rc = 1
+    result = None
     try:
-        rc = diff_file(fin, fout, verbose=verbose)
+        result = diff_file(fin, fout, verbose=verbose)
     except IOError as ioe:
         logging.error("load_file error: {}".format(ioe))
         raise
         
 
-    return rc
+    return result
 
 ### main
 
@@ -116,10 +116,10 @@ while True:
         print("got row:", row)
         filename = row[0].decode("utf-8")
         print(f"running diff on {filename}")
-        rc = 1
+        result = ""
         try:
-            rc = diff(filename)
-            print(f"diff({filename} - return {rc} - files match")
+            result = diff(filename)
+            print(f"diff({filename} - complete")
         except IOError as ioe:
             print(f"load({filename} - IOError: {ioe}")
             rc = 1
@@ -127,19 +127,22 @@ while True:
             print(f"load({filename} - Unexpected exception: {e}") 
             rc = 1
 
-        if rc == 0:
-            print(f"marking diff of {filename} complete")
+        if result:
+            print(f"diff of {filename} found differences: {result}")
+            if len(result) > 80: 
+                result = result[:80]
         else:
-            print(f"diff check on {filename} failed")
+            print(f"diff check on {filename} found no diffs")
 
         # update inventory table
         print("current row:", row)
         row[6] = int(time.time())
         row[7] = rc
+        row[9] = result
         print("updated row:", row)
         table[index] = row
         
-    print(f"sleeping  {sleep_time}} seconds")
+    print(f"sleeping  {sleep_time} seconds")
     time.sleep(sleep_time)   # sleep for a bit to avoid excess cpu 
 
 print('unexpected exit')

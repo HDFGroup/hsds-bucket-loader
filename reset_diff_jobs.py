@@ -57,6 +57,7 @@ for i in range(table.nrows):
         row[6] = 0
         row[7] = 0
         row[8] = b''
+        row[9] = b''
         print(f"resetting {filename} diff")
         table[i] = row
         reset_count += 1

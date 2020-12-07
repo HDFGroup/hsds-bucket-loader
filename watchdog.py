@@ -47,7 +47,7 @@ def watch_bucket():
         matches = table.read_where(condition, limit=1)
         if len(matches) == 0:
             print(f"not found, adding filename: {key}")
-            row = (key, 0, 0, 0, "", 0, 0, 0, "")
+            row = (key, 0, 0, 0, "", 0, 0, 0, "", "")
             table.append([row,])
         else:
             pass  # filename found

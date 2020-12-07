@@ -1,6 +1,5 @@
 import time
 import os
-import sys
 import logging
 import s3fs
 import h5py

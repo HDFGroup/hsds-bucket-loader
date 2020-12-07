@@ -31,7 +31,7 @@ print(f"{inventory_domain} found, owner: {f.owner}, last madified: {datetime.fro
 print("Contents")
 print("\tfilename")
 print("\tload\tStart\tDone\tRuntime\trc\tPod")
-print("\tDiff\tStart\tDone\tRuntime\trc\tPod")
+print("\tDiff\tStart\tDone\tRuntime\trc\tresult\tPod")
 print("-"*160)
 table = f["inventory"]
 for row in table:
@@ -65,9 +65,11 @@ for row in table:
     else:
         diff_runtime = "0"
     diff_podname = row[8].decode('utf-8')
+    diff_result = row[9].decode('utf-8')
+
     print(f"{filename}")
     fmt_str = f"\tload\t{load_start}\t{load_stop}\t{load_runtime}\t{load_rc}\t{load_podname}"
     print(fmt_str)
-    fmt_str = f"\tdiff\t{diff_start}\t{diff_stop}\t{diff_runtime}\t{diff_rc}\t{diff_podname}"
+    fmt_str = f"\tdiff\t{diff_start}\t{diff_stop}\t{diff_runtime}\t{diff_rc}\t{diff_podname}\t{diff_result}"
     print(fmt_str)
 print(f"{table.nrows} rows")
