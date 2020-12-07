@@ -66,8 +66,8 @@ for row in table:
         diff_runtime = "0"
     diff_podname = row[8].decode('utf-8')
     print(f"{filename}")
-    fmt_str = f"\tload\t{load_start:30}\t{load_stop:30}\t{load_runtime:30}\t{load_rc:30}\t{load_podname:30}"
+    fmt_str = f"\tload\t{load_start}\t{load_stop}\t{load_runtime}\t{load_rc}\t{load_podname}"
     print(fmt_str)
-    fmt_str = f"\tdiff\t{diff_start:30}\t{diff_stop:30}\t{diff_runtime:30}\t{diff_rc:30}\t{diff_podname:30}"
+    fmt_str = f"\tdiff\t{diff_start}\t{diff_stop}\t{diff_runtime}\t{diff_rc}\t{diff_podname}"
     print(fmt_str)
 print(f"{table.nrows} rows")

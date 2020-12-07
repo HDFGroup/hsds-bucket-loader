@@ -13,5 +13,5 @@ aws_s3_gateway: http://s3.us-west-2.amazonaws.com  # change to reflect region of
 hsds_global: http://10.100.0.136:5101  # run: set the IP here to the CLUSTER_IP you get when running kubectl get service hsds
 hsds_local: http://localhost:5101  # this is the pod-local address, set to null if running loader outside of kubernetes
 aws_region: us-west-2  # change to reflect AWS region you are running in
-watchdog_sleep_time: 60  # time the watchdog sleeps between checking for new HDF5 files
+watchdog_sleep_time: 10  # time the watchdog sleeps between checking for new HDF5 files
 log_level: ERROR

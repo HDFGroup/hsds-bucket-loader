@@ -31,10 +31,8 @@ if len(sys.argv) > 1:
 else:
     elapse_time = 240
 
-print(f"resetting failed jobs older than {elapse_time} minutes...")
+print("resetting diff jobs")
 print("")
-
-
 
 
 tgt_bucket = config.get("tgt_bucket")
@@ -54,20 +52,13 @@ reset_count = 0
 for i in range(table.nrows):
     row = table[i]
     filename = row[0].decode('utf-8')
-    start = row[1]
-    stop = row[2]
-    rc = row[3]
-    if not start:
-        print(f"{filename} not yet processed")
-        continue
-    if stop and rc == 0:
-        print(f'{filename} loaded successfully')
-        continue
-    if now - start < elapse_time*60:
-        print(f"{filename} job started less than {elapse_time} minutes ago")
-        continue
-    print(f"resetting {filename}")
-    table[i] = (filename.encode('utf-8'), 0, 0, 0, "", 0, 0, 0, "")
-    reset_count += 1
+    if row[5] > 0:
+        row[5] = 0
+        row[6] = 0
+        row[7] = 0
+        row[8] = b''
+        print(f"resetting {filename} diff")
+        table[i] = row
+        reset_count += 1
     
-print(f"done - reset {reset_count} load jobs")
+print(f"done - reset {reset_count} diff jobs")
