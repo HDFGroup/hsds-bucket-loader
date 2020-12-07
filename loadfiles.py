@@ -1,5 +1,6 @@
 import time
 import os
+import sys
 import logging
 import s3fs
 import h5py
@@ -66,7 +67,7 @@ def load(filename):
         endpoint = hsds_global
 
     print(f"running loading {s3path} to {tgt_path}")
-    s3 = s3fs.S3FileSystem()
+    s3 = s3fs.S3FileSystem(use_ssl=False)
 
     try:
         fin = h5py.File(s3.open(s3path, "rb"), "r")
@@ -113,8 +114,6 @@ def load(filename):
         
     fout.close()
 
-    return
-
 ### main
 
 loglevel = config.get("log_level")
@@ -148,10 +147,8 @@ while True:
     now = int(time.time())
     update_val = {"loadstart": now, "loadstatus": -1, "loadpodname": pod_name}
 
-
     # query for row with 0 start value and update it to now
-    # indices = table.update_where(condition, update_val, limit=1)
-    indices = table.read_where(condition, limit=1)
+    indices = table.update_where(condition, update_val, limit=1)
     print("indices:", indices)
 
     if indices is not None and len(indices) > 0:

@@ -29,8 +29,10 @@ inventory_domain = config.get("inventory_domain")
 f = h5pyd.File(inventory_domain, "r", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
 print(f"{inventory_domain} found, owner: {f.owner}, last madified: {datetime.fromtimestamp(f.modified)}")
 print("Contents")
-print("\tFilename\tLoad Start\tLoad Done\tLoad Runtime\tLoad rc\tLoad Pod\tDiff Start\tDiff Done\tDiff Runtime\tDiff rc\tLoad Pod")
-print("-"*80)
+print("\tfilename")
+print("\tload\tStart\tDone\tRuntime\trc\tPod")
+print("\tDiff\tStart\tDone\tRuntime\trc\tPod")
+print("-"*160)
 table = f["inventory"]
 for row in table:
     filename = row[0].decode('utf-8')
@@ -62,8 +64,10 @@ for row in table:
         diff_runtime = f"{int(row[6] - row[5]) // 60:4d}m {(row[6] - row[5]) % 60:2}s"
     else:
         diff_runtime = "0"
-    diff_podname = row[8]
-    fmt_str = f"\t{filename}\t{load_start}\t{load_stop}\t{load_runtime}\t{load_rc}\t{load_podname}"
-    fmt_str +=            f"\t{diff_start}\t{diff_stop}\t{diff_runtime}\t{diff_rc}\t{diff_podname}"
+    diff_podname = row[8].decode('utf-8')
+    print(f"{filename}")
+    fmt_str = f"\tload\t{load_start:30}\t{load_stop:30}\t{load_runtime:30}\t{load_rc:30}\t{load_podname:30}"
+    print(fmt_str)
+    fmt_str = f"\tdiff\t{diff_start:30}\t{diff_stop:30}\t{diff_runtime:30}\t{diff_rc:30}\t{diff_podname:30}"
     print(fmt_str)
 print(f"{table.nrows} rows")

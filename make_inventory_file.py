@@ -22,7 +22,7 @@ print("creating inventory domain:", inventory_domain)
 if tgt_bucket:
     print("tgt_bucket:", tgt_bucket)
 f = h5pyd.File(inventory_domain, "x", endpoint=endpoint, username=username, password=password, bucket=tgt_bucket)
-dt=[("filename", "S64"), ("loadstart", "i8"), ("loaddone", "i8"), ('loadstatus', "i4"), ('loadpod_name', "S40"),
+dt=[("filename", "S64"), ("loadstart", "i8"), ("loaddone", "i8"), ('loadstatus', "i4"), ('loadpodname', "S40"),
                           ("diffstart", "i8"), ("diffdone", "i8"), ('diffstatus', "i4"), ('diffpodname', "S40")]
 table = f.create_table("inventory", dtype=dt)
 
