@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: hsds-bucket-loader
-  name: hsds-bucket-loader
+    app: hsds-bucket-diff
+  name: hsds-bucket-diff
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hsds-bucket-loader
+      app: hsds-bucket-diff
   template:
     metadata:
       labels:
-        app: hsds-bucket-loader
+        app: hsds-bucket-diff
     spec:
       containers:
         -
-          name: load
+          name: diff
           image: hdfgroup/bucket_loader:v0.3
           imagePullPolicy: IfNotPresent
           resources:
@@ -30,7 +30,7 @@ spec:
             subPath: config.yml
           env:
           - name: RUN_COMMAND
-            value: load
+            value: diff
           - name: PASSWORD_FILE
             value: /config/passwd.txt
           - name: HS_USERNAME

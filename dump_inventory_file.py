@@ -31,7 +31,7 @@ print(f"{inventory_domain} found, owner: {f.owner}, last madified: {datetime.fro
 print("Contents")
 print("\tfilename")
 print("\tload\tStart\tDone\tRuntime\trc\tPod")
-print("\tDiff\tStart\tDone\tRuntime\trc\tresult\tPod")
+print("\tDiff\tStart\tDone\tRuntime\trc\tPod\tresult")
 print("-"*160)
 table = f["inventory"]
 for row in table:

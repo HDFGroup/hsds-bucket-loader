@@ -9,6 +9,8 @@ COPY loadfiles.py /app
 COPY utillib.py /app
 COPY chunkiter.py /app
 COPY watchdog.py /app
+COPY diff_files.py /app
+COPY hsdiff.py /app
 COPY dump_inventory_file.py /app
 COPY make_inventory_file.py /app
 COPY config.py /app

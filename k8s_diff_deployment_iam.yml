@@ -2,18 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: hsds-bucket-loader
-  name: hsds-bucket-loader
+    app: hsds-bucket-diff
+  name: hsds-bucket-diff
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hsds-bucket-loader
+      app: hsds-bucket-diff
   template:
     metadata:
       labels:
-        app: hsds-bucket-loader
+        app: hsds-bucket-diff
     spec:
+      serviceAccountName: hsds-eks-policy
       containers:
         -
           name: load
@@ -30,7 +31,7 @@ spec:
             subPath: config.yml
           env:
           - name: RUN_COMMAND
-            value: load
+            value: diff
           - name: PASSWORD_FILE
             value: /config/passwd.txt
           - name: HS_USERNAME
@@ -47,16 +48,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: head
           image: hdfgroup/hsds:v0.6.3m
@@ -90,16 +81,6 @@ spec:
             value: null
           - name: PASSWORD_FILE
             value: /config/passwd.txt
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: sn
           image: hdfgroup/hsds:v0.6.3m
@@ -131,25 +112,15 @@ spec:
             value: null
           - name: PASSWORD_FILE
             value: /config/passwd.txt
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: dn
           image: hdfgroup/hsds:v0.6.3m
           imagePullPolicy: IfNotPresent
           resources:
             requests:
-              memory: "1024M"
+              memory: "256M"
             limits:
-              memory: "1024M"
+              memory: "512M"
           volumeMounts:
           - name: accounts
             mountPath: "/config/passwd.txt"
@@ -170,16 +141,6 @@ spec:
             value: http://localhost:5100
           - name: K8S_APP_LABEL
             value: null
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
         -
           name: rangeget
           image: hdfgroup/hsds:v0.6.3m
@@ -206,16 +167,6 @@ spec:
             value: http://localhost:5100
           - name: K8S_APP_LABEL
             value: null
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_access_key_id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-auth-keys
-                key: aws_secret_access_key
       volumes:
       - name: accounts
         secret:
