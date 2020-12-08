@@ -120,6 +120,7 @@ while True:
         try:
             result = diff(filename)
             print(f"diff({filename} - complete")
+            rc = 0
         except IOError as ioe:
             print(f"load({filename} - IOError: {ioe}")
             rc = 1

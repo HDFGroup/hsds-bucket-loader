@@ -17,7 +17,7 @@ spec:
       serviceAccountName: hsds-eks-policy
       containers:
         -
-          name: load
+          name: diff
           image: hdfgroup/bucket_loader:v0.3
           imagePullPolicy: IfNotPresent
           resources:
