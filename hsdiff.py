@@ -229,6 +229,8 @@ def diff_dataset(src, ctx):
         for s in it:
             msg = "checking dataset data for slice: {}".format(s)
             logging.debug(msg)
+            if ctx["verbose"]:
+                print(msg)
 
             arr_src = src[s]
             msg = "got src array {}".format(arr_src.shape)
@@ -285,7 +287,7 @@ def diff_file(fin, fout, verbose=False, nodata=False, noattr=False, quiet=False)
     # build a rough map of the file using the internal function above
     fin.visititems(object_diff_helper)
     differences = ctx["differences"]
-    result = None
+    result = ""
     if  differences> 0:
         logging.info(f"found {differences} differences")
         if ctx["diff_msg"]:

@@ -65,7 +65,7 @@ def diff(filename):
         raise
 
     # do the actual diff
-    result = None
+    result = ""
     try:
         result = diff_file(fin, fout, verbose=verbose)
     except IOError as ioe:
