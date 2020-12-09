@@ -59,12 +59,11 @@ for row in table:
     else:
         diff_stop = 0
     diff_rc = row[7]
-    load_podname = row[8].decode('utf-8')
+    diff_podname = row[8].decode('utf-8')
     if row[6] > 0:
         diff_runtime = f"{int(row[6] - row[5]) // 60:4d}m {(row[6] - row[5]) % 60:2}s"
     else:
         diff_runtime = "0"
-    diff_podname = row[8].decode('utf-8')
     diff_result = row[9].decode('utf-8')
 
     print(f"{filename}")

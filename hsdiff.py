@@ -291,9 +291,9 @@ def diff_file(fin, fout, verbose=False, nodata=False, noattr=False, quiet=False)
     if  differences> 0:
         logging.info(f"found {differences} differences")
         if ctx["diff_msg"]:
-            result = ctx["diff_msg"]
+            result = "FAILED: " + ctx["diff_msg"]
         else:
-            result = "files differ"
+            result = "FAILED: files differ"
     else:
         logging.info("no differences")
 
