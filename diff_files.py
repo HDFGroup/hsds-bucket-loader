@@ -134,6 +134,7 @@ while True:
                 result = result[:80]
         else:
             print(f"diff check on {filename} found no diffs")
+            result = "PASSED"
 
         # update inventory table
         print("current row:", row)

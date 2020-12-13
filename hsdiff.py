@@ -247,7 +247,8 @@ def diff_dataset(src, ctx):
     except (IOError, TypeError) as e:
         msg = "ERROR : failed to copy dataset data : {}".format(str(e))
         logging.error(msg)
-        print(msg)
+        record_diff(ctx, msg)
+        return False
 
     if not ctx["noattr"]:
         result = diff_attrs(src, tgt, ctx)
@@ -280,6 +281,7 @@ def diff_file(fin, fout, verbose=False, nodata=False, noattr=False, quiet=False)
             diff_datatype(obj, ctx)
         else:
             logging.error("no handler for object class: {}".format(type(obj)))
+            return "FAILED: invalid class"
 
     # check links in root group
     diff_group(fin, ctx)

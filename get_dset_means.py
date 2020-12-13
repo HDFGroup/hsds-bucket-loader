@@ -17,7 +17,7 @@ def get_mean(dset):
 
         for s in it:
             msg = "checking dataset data for slice: {}".format(s)
-            logging.debug(msg)
+            logging.info(msg)
 
             arr = dset[s]
             msg = "got array {}".format(arr.shape)
@@ -55,7 +55,7 @@ def visit(name):
 # Main
 #
 
-loglevel = logging.ERROR
+loglevel = logging.INFO
 logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 mean_map = {}
 
@@ -65,9 +65,8 @@ if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
 
 domain = sys.argv[1]
 
-f = h5py.File(domain, mode="r")
+f = h5py.File(domain, mode="r", use_cache=False)
 f.visit(visit)
-
 names = list(mean_map.keys())
 names.sort()
 for name in names:
