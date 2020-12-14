@@ -59,7 +59,7 @@ spec:
                 key: aws_secret_access_key
         -
           name: head
-          image: hdfgroup/hsds:v0.6.3m
+          image: hdfgroup/hsds:v0.6.3r
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -102,7 +102,7 @@ spec:
                 key: aws_secret_access_key
         -
           name: sn
-          image: hdfgroup/hsds:v0.6.3m
+          image: hdfgroup/hsds:v0.6.3r
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -143,7 +143,7 @@ spec:
                 key: aws_secret_access_key
         -
           name: dn
-          image: hdfgroup/hsds:v0.6.3m
+          image: hdfgroup/hsds:v0.6.3r
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -182,7 +182,7 @@ spec:
                 key: aws_secret_access_key
         -
           name: rangeget
-          image: hdfgroup/hsds:v0.6.3m
+          image: hdfgroup/hsds:v0.6.3r
           imagePullPolicy: IfNotPresent
           resources:
             requests:

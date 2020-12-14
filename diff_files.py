@@ -132,6 +132,8 @@ while True:
             print(f"diff of {filename} found differences: {result}")
             if len(result) > 80: 
                 result = result[:80]
+            if rc == 0:
+                rc = 1  # set to indicate failure
         else:
             print(f"diff check on {filename} found no diffs")
             result = "PASSED"
