@@ -16,8 +16,9 @@ def visit(name):
         return None
      
     shape = dset.shape
+    maxshape = dset.maxshape
     logging.info(f'{name} got shape: {shape}')
-    shape_map[name] = shape
+    shape_map[name] = (shape, maxshape)
     return None
 
 #
@@ -42,8 +43,11 @@ f.visit(visit)
 names = list(shape_map.keys())
 names.sort()
 for name in names:
-    shape = shape_map[name]
-    print(f"{name}: {shape}")
+    (shape, maxshape) = shape_map[name]
+    if shape == maxshape:
+        print(f"{name}: {shape}")
+    else:
+        print(f"{name}: {shape}, {maxshape}")
 
  
 
