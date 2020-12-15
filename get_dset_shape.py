@@ -34,7 +34,7 @@ if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
 
 filename = sys.argv[1]
 if filename.startswith("s3://"):
-    s3 = s3fs.S3FileSystem()
+    s3 = s3fs.S3FileSystem(use_ssl=False)
     f = h5py.File(s3.open(filename, "rb"), mode='r')
 else:
     f = h5py.File(filename, mode="r", use_cache=False)
