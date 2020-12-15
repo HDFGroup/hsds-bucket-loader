@@ -17,7 +17,7 @@ def visit(name):
      
     shape = dset.shape
     maxshape = dset.maxshape
-    logging.info(f'{name} got shape: {shape}')
+    logging.info(f'{name} got shape: {shape}, maxshape: {maxshape}')
     shape_map[name] = (shape, maxshape)
     return None
 
