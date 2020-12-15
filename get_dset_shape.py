@@ -2,16 +2,17 @@ import sys
 import s3fs
 import logging
 
-USE_H5PY=1
-if USE_H5PY:
-    import h5py
-else:
-    import h5pyd as h5py
+
+import h5py
+import h5pyd 
 
 
 def visit(name):
     dset = f[name]
-    if not isinstance(dset, h5py.Dataset):
+    if isinstance(dset.id.id, str) and not dset.id.id.startswith("d-"):
+        # hsds, but not a dataset
+        return None
+    if isinstance(dset.id.id, int) and not isinstance(dset, h5py.Dataset):
         # skip groups
         return None
      
@@ -25,7 +26,7 @@ def visit(name):
 # Main
 #
 
-loglevel = logging.INFO
+loglevel = logging.ERROR
 logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 shape_map = {}
 
@@ -37,8 +38,10 @@ filename = sys.argv[1]
 if filename.startswith("s3://"):
     s3 = s3fs.S3FileSystem(use_ssl=False)
     f = h5py.File(s3.open(filename, "rb"), mode='r')
+elif filename.startswith("hdf5://"):
+    f = h5pyd.File(filename, mode='r', use_cache=False)
 else:
-    f = h5py.File(filename, mode="r", use_cache=False)
+    f = h5py.File(filename, mode="r")
 f.visit(visit)
 names = list(shape_map.keys())
 names.sort()
@@ -48,6 +51,7 @@ for name in names:
         print(f"{name}: {shape}")
     else:
         print(f"{name}: {shape}, {maxshape}")
+print('done!')
 
  
 
