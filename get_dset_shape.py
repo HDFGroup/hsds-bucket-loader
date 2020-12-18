@@ -6,6 +6,14 @@ import logging
 import h5py
 import h5pyd 
 
+def print_values(name):
+    dset = f[name]
+    extent = dset.shape[0]
+    print("data...")
+    for i in range(extent):
+        e = dset[i]
+        print(f"{i:4}: {e}")
+
 
 def visit(name):
     dset = f[name]
@@ -38,8 +46,8 @@ logging.basicConfig(format='%(asctime)s %(message)s', level=loglevel)
 shape_map = {}
 
 if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
-    print("usage: python get_dset_means.py filepath [--h5path path]")
-    print("filepath can be a posix HDF5 file, a s3 uri to an hdf5 file, or an HSDS domain path")
+    print("usage: python get_dset_shape.py filepath [--h5path path] [--dump]")
+    print("filepath can be a posix HDF5 file (normal posix path), a s3 uri ('s3://' prefix) to an hdf5 file, or an HSDS domain path ('hdf5://' preefix)")
     sys.exit(0)
 
 filename = sys.argv[1]
@@ -54,7 +62,11 @@ if len(sys.argv) > 2 and sys.argv[2] == "--h5path":
     h5path = sys.argv[3]
 else:
     h5path = None
-
+if len(sys.argv) > 4 and h5path and sys.argv[4] == "--dump":
+    print("argv[4]:", sys.argv[4])
+    dump = True
+else:
+    dump = False
 
 if h5path:
     visit(h5path)
@@ -70,6 +82,11 @@ for name in names:
         print(f"   maxshape: {dset_info['maxshape']}")
     if "chunks" in dset_info:
         print(f"   chunks: {dset_info['chunks']}")
+
+if dump:
+    print_values(h5path)
+
+
 print('done!')
 
  
