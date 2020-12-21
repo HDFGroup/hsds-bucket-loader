@@ -52,11 +52,15 @@ if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
 
 filename = sys.argv[1]
 if filename.startswith("s3://"):
+    print(f"h5py version: {h5py.version.version}, hdf5_version: {h5py.version.hdf5_version}")
     s3 = s3fs.S3FileSystem(use_ssl=False)
     f = h5py.File(s3.open(filename, "rb"), mode='r')
 elif filename.startswith("hdf5://"):
     f = h5pyd.File(filename, mode='r', use_cache=False)
+    print(f"h5pyd version: {h5pyd.version.version}")
 else:
+    print(f"h5py version: {h5py.version.version}, hdf5_version: {h5py.version.hdf5_version}")
+
     f = h5py.File(filename, mode="r")
 if len(sys.argv) > 2 and sys.argv[2] == "--h5path":
     h5path = sys.argv[3]
