@@ -62,8 +62,7 @@ if len(sys.argv) > 2 and sys.argv[2] == "--h5path":
     h5path = sys.argv[3]
 else:
     h5path = None
-if len(sys.argv) > 4 and h5path and sys.argv[4] == "--dump":
-    print("argv[4]:", sys.argv[4])
+if h5path and sys.argv[-1] == "--dump":
     dump = True
 else:
     dump = False
