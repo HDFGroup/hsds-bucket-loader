@@ -47,7 +47,7 @@ Setting up the bucket loader
 5. Run k8s_make_secrets.sh to create Kubernetes secrests to store AWS credentials and HSDS username and password (the HSDS username will be the owner of the created HSDS domains)
 6. Review and modify as needed the config.yml file in this project.  Adjust for your bucket location, HSDS endpoint, etc.
 7. Run make_configmap.sh to create a Kubernetes ConfigMap that will store the config file settings
-8. Ovverride the hsds_endpoint in config.yml by setting the environment variable HSDS_ENDPOINT to use the external endpoint of HSDS (since you'll be running the following scripts from your desktop)
+8. Override the hsds_endpoint in config.yml by setting the environment variable HSDS_ENDPOINT to use the external endpoint of HSDS (since you'll be running the following scripts from your desktop)
 9. Make sure the tgt_folder specified in the config file exists in HSDS (use hstouch to create any needed folders)
 10. Run make_inventory_file.py to create the initial inventory domain
 11. Run `kubectl apply -f k8s_watch_deployment.yml` to launch the watcher pod
